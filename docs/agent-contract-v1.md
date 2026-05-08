@@ -12,13 +12,21 @@ Given a user message and a recording transcript context, return one assistant re
 
 ```json
 {
-  "conversation_id": "optional-existing-conversation-id",
+  "conversation_id": "optional-reserved-for-future",
   "recording_id": "required-recording-id",
   "recording_type": "mic_or_call",
+  "sound_url": "required-existing-soundUrl-thread-key",
   "user_id": "required-user-id",
   "user_message": "What did we decide in this call?",
   "platform": "web_or_expo"
 }
+
+## Agent v1 conversation identity
+
+For Agent v1, chat history is grouped using the existing Supabase `chat_history` table:
+
+```txt
+user_id + soundUrl
 
 ## Response body
 

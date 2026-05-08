@@ -1,0 +1,19 @@
+-- Agent v1 Supabase notes
+-- Do not run this file yet.
+--
+-- Current app message table:
+--
+-- table: chat_history
+--
+-- columns:
+--   id uuid primary key default gen_random_uuid()
+--   created_at timestamp with time zone not null default now()
+--   user_id uuid default auth.uid()
+--   message text
+--   sender text
+--   "soundUrl" text
+--
+-- For Agent v1, conversation history is identified by:
+--   user_id + "soundUrl"
+--
+-- This keeps Agent v1 compatible with the existing Next.js and Expo apps.
