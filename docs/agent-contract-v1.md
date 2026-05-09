@@ -1,5 +1,14 @@
 # Agent v1 Contract
 
+## Deployed Environments
+
+### Staging
+
+Base URL:
+
+````txt
+https://b2c-agent-v1-staging-a8eed207afac.herokuapp.com
+
 ## Endpoint
 
 POST /v1/agent/respond
@@ -38,7 +47,7 @@ user_id + soundUrl
   "assistant_message": "The main decision was...",
   "error": null
 }
-```
+````
 
 ## Error response body
 
