@@ -2,6 +2,8 @@ from fastapi import FastAPI
 
 from uuid import uuid4
 
+import logging
+
 from app.schemas import AgentRespondRequest, AgentRespondResponse, AgentError
 from app.services.model_service import generate_agent_reply
 from app.services.supabase_service import get_chat_history, save_chat_message
@@ -12,6 +14,8 @@ app = FastAPI(
     title="B2C Agent v1",
     version="0.1.0"
 )
+
+logger = logging.getLogger(__name__)
 
 @app.get("/")
 def root():
@@ -68,7 +72,9 @@ async def agent_respond(request: AgentRespondRequest):
             error=None,
         )
 
-    except Exception as exc:
+    except Exception:
+        logger.exception("Agent response failed")
+
         return AgentRespondResponse(
             status="error",
             conversation_id=conversation_id,
@@ -77,6 +83,6 @@ async def agent_respond(request: AgentRespondRequest):
             transcript_was_truncated=transcript_was_truncated,
             error=AgentError(
                 code="agent_response_failed",
-                message=str(exc),
+                message="Agent response failed. Please try again.",
             ),
         )
