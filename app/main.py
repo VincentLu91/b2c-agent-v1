@@ -28,7 +28,7 @@ def health_check():
 
 @app.post("/v1/agent/respond", response_model=AgentRespondResponse)
 async def agent_respond(request: AgentRespondRequest):
-    conversation_id = request.conversation_id or f"conv_{uuid4()}"
+    conversation_id = request.conversation_id or f"{request.user_id}:{request.sound_url}"
     assistant_message_id = f"msg_{uuid4()}"
 
     chat_history = get_chat_history(
