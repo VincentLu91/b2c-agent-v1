@@ -5,6 +5,7 @@ from uuid import uuid4
 from app.schemas import AgentRespondRequest, AgentRespondResponse
 from app.services.model_service import generate_agent_reply
 from app.services.supabase_service import get_chat_history, save_chat_message
+from app.services.transcript_context import was_transcript_truncated
 
 # create backend application
 app = FastAPI(
@@ -31,10 +32,7 @@ async def agent_respond(request: AgentRespondRequest):
     conversation_id = request.conversation_id or f"{request.user_id}:{request.sound_url}"
     assistant_message_id = f"msg_{uuid4()}"
 
-    transcript_was_truncated = (
-        request.transcript_context is not None
-        and len(request.transcript_context.strip()) > 12000
-    )
+    transcript_was_truncated = was_transcript_truncated(request.transcript_context)
 
     chat_history = get_chat_history(
         user_id=request.user_id,

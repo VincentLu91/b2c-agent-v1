@@ -2,22 +2,7 @@ from cohere import AsyncClient
 
 from app.config import settings
 
-MAX_TRANSCRIPT_CONTEXT_CHARS = 12000
-
-
-def format_transcript_context(transcript_context: str | None) -> str:
-    if not transcript_context or not transcript_context.strip():
-        return "No transcript context provided yet."
-
-    cleaned = transcript_context.strip()
-
-    if len(cleaned) <= MAX_TRANSCRIPT_CONTEXT_CHARS:
-        return cleaned
-
-    return (
-        cleaned[:MAX_TRANSCRIPT_CONTEXT_CHARS]
-        + "\n\n[Transcript was truncated because it was too long for this Agent v1 request.]"
-    )
+from app.services.transcript_context import format_transcript_context
 
 
 def format_chat_history(chat_history: list[dict] | None) -> str:
