@@ -31,6 +31,11 @@ async def agent_respond(request: AgentRespondRequest):
     conversation_id = request.conversation_id or f"{request.user_id}:{request.sound_url}"
     assistant_message_id = f"msg_{uuid4()}"
 
+    transcript_was_truncated = (
+        request.transcript_context is not None
+        and len(request.transcript_context.strip()) > 12000
+    )
+
     chat_history = get_chat_history(
         user_id=request.user_id,
         sound_url=request.sound_url,
@@ -61,5 +66,6 @@ async def agent_respond(request: AgentRespondRequest):
         conversation_id=conversation_id,
         assistant_message_id=assistant_message_id,
         assistant_message=assistant_message,
+        transcript_was_truncated=transcript_was_truncated,
         error=None,
     )

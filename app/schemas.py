@@ -37,3 +37,4 @@ class AgentRespondResponse(BaseModel):
     assistant_message_id: Optional[str] = None
     assistant_message: Optional[str] = None
     error: Optional[AgentError] = None
+    transcript_was_truncated: bool = False
