@@ -2,6 +2,23 @@ from cohere import AsyncClient
 
 from app.config import settings
 
+MAX_TRANSCRIPT_CONTEXT_CHARS = 12000
+
+
+def format_transcript_context(transcript_context: str | None) -> str:
+    if not transcript_context or not transcript_context.strip():
+        return "No transcript context provided yet."
+
+    cleaned = transcript_context.strip()
+
+    if len(cleaned) <= MAX_TRANSCRIPT_CONTEXT_CHARS:
+        return cleaned
+
+    return (
+        cleaned[:MAX_TRANSCRIPT_CONTEXT_CHARS]
+        + "\n\n[Transcript was truncated because it was too long for this Agent v1 request.]"
+    )
+
 
 def format_chat_history(chat_history: list[dict] | None) -> str:
     if not chat_history:
@@ -31,7 +48,7 @@ async def generate_agent_reply(
 
     history_text = format_chat_history(chat_history)
 
-    transcript_text = transcript_context or "No transcript context provided yet."
+    transcript_text = format_transcript_context(transcript_context)
 
     prompt = f"""
 You are Agent v1 for a personal AI note-taking app.
