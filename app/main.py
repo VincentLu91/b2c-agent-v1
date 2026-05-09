@@ -7,7 +7,10 @@ import logging
 from app.schemas import AgentRespondRequest, AgentRespondResponse, AgentError
 from app.services.model_service import generate_agent_reply
 from app.services.supabase_service import get_chat_history, save_chat_message
-from app.services.transcript_context import was_transcript_truncated
+from app.services.transcript_context import (
+    MAX_TRANSCRIPT_CONTEXT_CHARS,
+    was_transcript_truncated,
+)
 
 # create backend application
 app = FastAPI(
@@ -29,6 +32,32 @@ def root():
 def health_check():
     return {
         "status": "healthy",
+    }
+
+@app.get("/v1/agent/contract")
+def agent_contract():
+    return {
+        "service": "b2c-agent-v1",
+        "agent_contract_version": 1,
+        "status": "available",
+        "endpoints": {
+            "respond": "/v1/agent/respond",
+            "contract": "/v1/agent/contract",
+            "health": "/healthz",
+        },
+        "supported_platforms": ["web", "expo"],
+        "supported_recording_types": ["mic", "call"],
+        "features": {
+            "chat_history_persistence": True,
+            "deterministic_conversation_id": True,
+            "transcript_context": True,
+            "transcript_context_max_chars": MAX_TRANSCRIPT_CONTEXT_CHARS,
+            "transcript_truncation_flag": True,
+            "stable_error_shape": True,
+            "agentic_rag": False,
+            "cross_recording_memory": False,
+            "artifacts": False,
+        },
     }
 
 @app.post("/v1/agent/respond", response_model=AgentRespondResponse)
