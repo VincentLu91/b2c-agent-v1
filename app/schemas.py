@@ -14,6 +14,7 @@ class AgentRespondRequest(BaseModel):
     
     # The app must send a recording ID.
     recording_id: str
+    sound_url: str
     
     # only "mic" or "call" are allowed values
     recording_type: Literal["mic", "call"]

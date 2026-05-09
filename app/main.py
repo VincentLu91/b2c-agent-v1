@@ -4,6 +4,7 @@ from uuid import uuid4
 
 from app.schemas import AgentRespondRequest, AgentRespondResponse
 from app.services.model_service import generate_agent_reply
+from app.services.supabase_service import get_chat_history, save_chat_message
 
 # create backend application
 app = FastAPI(
@@ -30,9 +31,29 @@ async def agent_respond(request: AgentRespondRequest):
     conversation_id = request.conversation_id or f"conv_{uuid4()}"
     assistant_message_id = f"msg_{uuid4()}"
 
+    chat_history = get_chat_history(
+        user_id=request.user_id,
+        sound_url=request.sound_url,
+    )
+
+    save_chat_message(
+        user_id=request.user_id,
+        sound_url=request.sound_url,
+        sender="user",
+        message=request.user_message,
+    )
+
     assistant_message = await generate_agent_reply(
         user_message=request.user_message,
         transcript_context=None,
+        chat_history=chat_history,
+    )
+
+    save_chat_message(
+        user_id=request.user_id,
+        sound_url=request.sound_url,
+        sender="assistant",
+        message=assistant_message,
     )
 
     return AgentRespondResponse(
