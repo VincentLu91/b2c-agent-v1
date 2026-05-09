@@ -9,6 +9,27 @@ Base URL:
 ````txt
 https://b2c-agent-v1-staging-a8eed207afac.herokuapp.com
 
+Validated on staging:
+/
+/healthz
+/v1/agent/contract
+/v1/agent/respond
+Supabase chat_history write/read using user_id + soundUrl
+
+### Production
+
+Base URL:
+
+```txt
+https://b2c-agent-v1-production-899ac73cdcff.herokuapp.com
+
+Validated on production:
+/
+/healthz
+/v1/agent/contract
+/v1/agent/respond
+Supabase chat_history write/read using user_id + soundUrl
+
 ## Endpoint
 
 POST /v1/agent/respond
