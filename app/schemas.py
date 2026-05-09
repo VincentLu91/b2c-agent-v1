@@ -24,6 +24,7 @@ class AgentRespondRequest(BaseModel):
     
     # Only "web" or "expo" are allowed.
     platform: Literal["web", "expo"]
+    persist_messages: bool = True
 
 
 class AgentError(BaseModel):

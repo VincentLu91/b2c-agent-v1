@@ -67,17 +67,20 @@ async def agent_respond(request: AgentRespondRequest):
     transcript_was_truncated = was_transcript_truncated(request.transcript_context)
 
     try:
-        chat_history = get_chat_history(
-            user_id=request.user_id,
-            sound_url=request.sound_url,
-        )
+        chat_history = []
 
-        save_chat_message(
-            user_id=request.user_id,
-            sound_url=request.sound_url,
-            sender="user",
-            message=request.user_message,
-        )
+        if request.persist_messages:
+            chat_history = get_chat_history(
+                user_id=request.user_id,
+                sound_url=request.sound_url,
+            )
+
+            save_chat_message(
+                user_id=request.user_id,
+                sound_url=request.sound_url,
+                sender="user",
+                message=request.user_message,
+            )
 
         assistant_message = await generate_agent_reply(
             user_message=request.user_message,
@@ -85,12 +88,13 @@ async def agent_respond(request: AgentRespondRequest):
             chat_history=chat_history,
         )
 
-        save_chat_message(
-            user_id=request.user_id,
-            sound_url=request.sound_url,
-            sender="assistant",
-            message=assistant_message,
-        )
+        if request.persist_messages:
+            save_chat_message(
+                user_id=request.user_id,
+                sound_url=request.sound_url,
+                sender="assistant",
+                message=assistant_message,
+            )
 
         return AgentRespondResponse(
             status="ok",
