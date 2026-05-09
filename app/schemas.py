@@ -20,6 +20,7 @@ class AgentRespondRequest(BaseModel):
     recording_type: Literal["mic", "call"]
     user_id: str
     user_message: str
+    transcript_context: Optional[str] = None
     
     # Only "web" or "expo" are allowed.
     platform: Literal["web", "expo"]

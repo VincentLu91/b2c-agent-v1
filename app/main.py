@@ -44,10 +44,10 @@ async def agent_respond(request: AgentRespondRequest):
     )
 
     assistant_message = await generate_agent_reply(
-        user_message=request.user_message,
-        transcript_context=None,
-        chat_history=chat_history,
-    )
+    user_message=request.user_message,
+    transcript_context=request.transcript_context,
+    chat_history=chat_history,
+)
 
     save_chat_message(
         user_id=request.user_id,
